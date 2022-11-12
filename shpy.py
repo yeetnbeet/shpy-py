@@ -4,15 +4,14 @@ import os
 
 class MetaFieldsPy :
     STORE_NAME = os.getenv("STORE_NAME")
-    SECRET_TOKEN = os.getenv("SECRET_TOKEN")
-    H = {"X-Shopify-Access-Token":SECRET_TOKEN,
+    H = {"X-Shopify-Access-Token":os.getenv("SECRET_TOKEN"),
     "Content-Type":"application/json"}
 
 
     def getMetafields(self,productId) :
         res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products/"+str(productId)+"/metafields.json",headers=self.H)
         resdata = res.json()
-        return resdata
+        return resdata["metafields"]
 
     def modifyExistingMetaField(self,metaFieldId,productId,value,type):
         d = {"metafield":{
@@ -33,3 +32,11 @@ class MetaFieldsPy :
         }}
         res = req.post("https://"+self.STORE_NAME+"/admin/api/2022-10/products/"+str(productId)+"/metafields.json",headers=self.H,json=d)
         print(res.status_code)
+
+    def productHasMetaField(self,productId,metaFieldKey):
+        metaFields = self.getMetafields(productId)
+        for item in metaFields:
+            if item["key"]== metaFieldKey :
+                return int(item["id"])
+        return False
+            
