@@ -51,8 +51,6 @@ class ProductsPy :
             print("Recursive1")
             res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products.json?collection_id="+str(collectionID),headers=self.H)
             resdata = res.json()
-            print(self.H)
-            print(resdata)
             for item in resdata ["products"]:
                 self.PRODUCT_LIST.append(item)
             if res.links != {}:
@@ -63,7 +61,6 @@ class ProductsPy :
             print("Recursive2")
             res = req.get(URL,headers=self.H)
             resdata = res.json()
-            print(res.links)
             for item in resdata ["products"]:
                 self.PRODUCT_LIST.append(item)
             if res.links != {} and len(res.links) == 2:
@@ -74,5 +71,26 @@ class ProductsPy :
         res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products/"+str(productID)+".json",headers=self.H)
         return res.json()
 
+    def deleteProduct(self,productId) :
+        res = req.delete("https://"+self.STORE_NAME+"/admin/api/2022-10/products/"+str(productId)+".json",headers=self.H)
+        return res.json(), res.status_code
         
+class CollectionPy :
+    STORE_NAME = os.getenv("STORE_NAME")
+    H = {"X-Shopify-Access-Token":os.getenv("SECRET_TOKEN"),
+        "Content-Type":"application/json"}
+
+    def addItemToExistingCollection(self,productId,collectionId):
+        data = {
+            "collect":{
+                "product_id":productId,
+                "collection_id":collectionId
+            }
+        }
+
+        res = req.post("https://"+self.STORE_NAME+"/admin/api/2022-10/collects.json",headers=self.H,json=data)
+        return res.json()
+
+    
+
             
