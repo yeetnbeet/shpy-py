@@ -1,5 +1,12 @@
 from shpy import MetaFieldsPy
+from shpy import ProductsPy
 
-shopify = MetaFieldsPy()
+shopifyMetaFields = MetaFieldsPy()
+shopifyProducts = ProductsPy()
 
-print(shopify.productHasMetaField(6682364706984,"commission_rate"))
+shopifyProducts.getAllProductsFromCollection(403466617077)
+print(len(shopifyProducts.PRODUCT_LIST))
+
+        
+
+

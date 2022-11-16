@@ -39,4 +39,40 @@ class MetaFieldsPy :
             if item["key"]== metaFieldKey :
                 return int(item["id"])
         return False
+
+class ProductsPy :
+    STORE_NAME = os.getenv("STORE_NAME")
+    H = {"X-Shopify-Access-Token":os.getenv("SECRET_TOKEN"),
+        "Content-Type":"application/json"}
+    PRODUCT_LIST = []
+
+    def getAllProductsFromCollection(self,collectionID="",URL=""):
+        if URL == "" :
+            print("Recursive1")
+            res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products.json?collection_id="+str(collectionID),headers=self.H)
+            resdata = res.json()
+            print(self.H)
+            print(resdata)
+            for item in resdata ["products"]:
+                self.PRODUCT_LIST.append(item)
+            if res.links != {}:
+                url = res.links['next']['url']
+                self.getAllProductsFromCollection(URL=url)
+
+        elif URL != "":
+            print("Recursive2")
+            res = req.get(URL,headers=self.H)
+            resdata = res.json()
+            print(res.links)
+            for item in resdata ["products"]:
+                self.PRODUCT_LIST.append(item)
+            if res.links != {} and len(res.links) == 2:
+                url = res.links['next']['url']
+                self.getAllProductsFromCollection(URL=url)
+
+    def getSingleProduct(self,productID) :
+        res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products/"+str(productID)+".json",headers=self.H)
+        return res.json()
+
+        
             
