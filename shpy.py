@@ -91,6 +91,33 @@ class CollectionPy :
         res = req.post("https://"+self.STORE_NAME+"/admin/api/2022-10/collects.json",headers=self.H,json=data)
         return res.json()
 
+class RedirectPy :
+    STORE_NAME = os.getenv("STORE_NAME")
+    H = {"X-Shopify-Access-Token":os.getenv("SECRET_TOKEN"),
+        "Content-Type":"application/json"}
+    REDIRECT_LIST = []
+    
+    def getAllRedirects(self,URL=""):
+        if URL == "" :
+            print("Recursive1")
+            res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/redirects.json?limit=250",headers=self.H)
+            resdata = res.json()
+            for item in resdata ["redirects"]:
+                self.REDIRECT_LIST.append(item)
+            if res.links != {}:
+                url = res.links['next']['url']
+                self.getAllRedirects(URL=url)
+
+        elif URL != "":
+            print("Recursive2")
+            res = req.get(URL,headers=self.H)
+            resdata = res.json()
+            for item in resdata ["redirects"]:
+                self.REDIRECT_LIST.append(item)
+            if res.links != {} and len(res.links) == 2:
+                url = res.links['next']['url']
+                self.getAllRedirects(URL=url)    
+
     
 
             
