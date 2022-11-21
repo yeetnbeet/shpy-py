@@ -97,8 +97,8 @@ class RedirectPy :
         "Content-Type":"application/json"}
     REDIRECT_LIST = []
     
-    def getAllRedirects(self,URL=""):
-        if URL == "" :
+    def getAllRedirects(self,URL=None):
+        if URL is None :
             print("Recursive1")
             res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/redirects.json?limit=250",headers=self.H)
             resdata = res.json()
@@ -107,8 +107,9 @@ class RedirectPy :
             if res.links != {}:
                 url = res.links['next']['url']
                 self.getAllRedirects(URL=url)
+            
 
-        elif URL != "":
+        elif URL is not None:
             print("Recursive2")
             res = req.get(URL,headers=self.H)
             resdata = res.json()
@@ -116,7 +117,8 @@ class RedirectPy :
                 self.REDIRECT_LIST.append(item)
             if res.links != {} and len(res.links) == 2:
                 url = res.links['next']['url']
-                self.getAllRedirects(URL=url)    
+                self.getAllRedirects(URL=url)
+                
 
     
 
