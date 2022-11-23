@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling","requests"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shpy"
+version = "0.0.1"
+authors = [
+  { name="Sam Segal", email="segalcsam@gmail.com" },
+]
+description = "Python Lib for Private shopify Apps"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
