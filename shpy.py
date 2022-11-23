@@ -46,8 +46,8 @@ class ProductsPy :
         "Content-Type":"application/json"}
     PRODUCT_LIST = []
 
-    def getAllProductsFromCollection(self,collectionID="",URL=""):
-        if URL == "" :
+    def getAllProductsFromCollection(self,collectionID="",URL=None):
+        if URL is None :
             print("Recursive1")
             res = req.get("https://"+self.STORE_NAME+"/admin/api/2022-10/products.json?collection_id="+str(collectionID),headers=self.H)
             resdata = res.json()
@@ -57,7 +57,7 @@ class ProductsPy :
                 url = res.links['next']['url']
                 self.getAllProductsFromCollection(URL=url)
 
-        elif URL != "":
+        elif URL is not None:
             print("Recursive2")
             res = req.get(URL,headers=self.H)
             resdata = res.json()
